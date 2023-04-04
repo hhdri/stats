@@ -40,6 +40,7 @@ def beta_ci(distribution_α, distribution_β, α=.05, num_samples=200):
     shortest_ci_report = 'Shortest  CI: [{:.5f}, {:.5f}]'.format(shortest_ci.interval_start, shortest_ci.interval_end)
     symmetric_ci_report = 'Symmetric CI: [{:.5f}, {:.5f}]'.format(symmetric_ci[0], symmetric_ci[1])
     
+    plt.rcParams["figure.figsize"] = (3,3)
     plot_xs = np.linspace(0, 1, 101)
     plot_ys = distribution.pdf(plot_xs)
     fig, ax = plt.subplots()

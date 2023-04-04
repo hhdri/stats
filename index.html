@@ -2,23 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
   <title>Experiment</title>
+  <style>
+    .input-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    #graph-area {
+      max-width: 100%;
+      overflow: auto;
+    }
+  </style>
 </head>
 <body>
-    <py-config>
-        packages = ["matplotlib", "pandas", "scipy", "numpy"]
-      </py-config>
+  <py-config>
+    packages = ["matplotlib", "pandas", "scipy", "numpy"]
+  </py-config>
   <div style="text-align: center;">
-    <div>
-        <input id="dist-alpha" class="py-input" type="number"/>
-        <input id="dist-beta" class="py-input" type="number"/>
-        <button id="calculate-btn" class="py-button" type="submit" py-click="calculate()">Add task</button>
+    <div class="input-container">
+      <input id="dist-alpha" class="py-input" type="number" style="width: 100%;" placeholder="Distribution's Alpha"/>
+      <input id="dist-beta" class="py-input" type="number" style="width: 100%;" placeholder="Distribution's Beta"/>
+      <button id="calculate-btn" class="py-button" type="submit" py-click="calculate()">Calculate CI</button>
     </div>
-    <h1 id="result1-plc"></h1>
-    <h1 id="result2-plc"></h1>
+    <h3 id="result1-plc"></h3>
+    <h3 id="result2-plc"></h3>
     <div id="graph-area"></div>
   </div>
   <py-script src="./main.py"></py-script>
