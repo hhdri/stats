@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-  <title>Experiment</title>
+  <title>Credible Interval for Beta Distribution</title>
   <style>
     .input-container {
       display: flex;
@@ -22,19 +22,19 @@
 </head>
 <body>
   <py-config>
-    packages = ["matplotlib", "pandas", "scipy", "numpy"]
+    packages = ["matplotlib", "scipy", "numpy"]
   </py-config>
+  <py-script src="./main.py"></py-script>
   <div style="text-align: center;">
-    <h1>Shortest Credible Interval for Beta Distribution</h1>
+    <h1>Credible Interval for Beta Distribution</h1>
     <div class="input-container">
-      <input id="dist-alpha" class="py-input" type="number" style="width: 100%;" placeholder="Distribution's Alpha"/>
-      <input id="dist-beta" class="py-input" type="number" style="width: 100%;" placeholder="Distribution's Beta"/>
+      <input id="dist-alpha" class="py-input" type="number" placeholder="Distribution's Alpha"/>
+      <input id="dist-beta" class="py-input" type="number" placeholder="Distribution's Beta"/>
       <button id="calculate-btn" class="py-button" type="submit" py-click="calculate()">Calculate CI</button>
     </div>
-    <h3 id="result1-plc"></h3>
-    <h3 id="result2-plc"></h3>
+    <h4 id="result1-plc"></h4>
+    <h4 id="result2-plc"></h4>
     <div id="graph-area"></div>
   </div>
-  <py-script src="./main.py"></py-script>
 </body>
 </html>
