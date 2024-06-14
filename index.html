@@ -1,40 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-  <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-  <title>Credible Interval for Beta Distribution</title>
-  <style>
-    .input-container {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    
-    #graph-area {
-      max-width: 100%;
-      overflow: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Website</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="scripts.js"></script>
+    <style>
+        #plot {
+	    border: 1px solid black;
+	    margin-left: 100px;
+	}
+    </style>
 </head>
 <body>
-  <py-config>
-    packages = ["matplotlib", "scipy", "numpy"]
-  </py-config>
-  <py-script src="./main.py"></py-script>
-  <div style="text-align: center;">
-    <h1>Credible Interval for Beta Distribution</h1>
-    <div class="input-container">
-      <input id="dist-alpha" class="py-input" type="number" placeholder="Distribution's Alpha"/>
-      <input id="dist-beta" class="py-input" type="number" placeholder="Distribution's Beta"/>
-      <button id="calculate-btn" class="py-button" type="submit" py-click="calculate()">Calculate CI</button>
-    </div>
-    <h4 id="result1-plc"></h4>
-    <h4 id="result2-plc"></h4>
-    <div id="graph-area"></div>
-  </div>
+    <button id="testButton">Test</button>
+    <input type="number" id="inputAlpha" value="1" min="1"/>
+    <input type="number" id="inputBeta" value="1" min="1"/>
+    <h1>Hello, World!</h1>
+    <svg id="plot" width="700" height="500">
+    </svg>
 </body>
 </html>
+
