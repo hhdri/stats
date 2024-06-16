@@ -1801,6 +1801,7 @@ var wasmExports = createWasm();
 var ___wasm_call_ctors = createExportWrapper('__wasm_call_ctors', 0);
 var _betaPDF = Module['_betaPDF'] = createExportWrapper('betaPDF', 3);
 var _betaPPF = Module['_betaPPF'] = createExportWrapper('betaPPF', 3);
+var _betaPDFAtMode = Module['_betaPDFAtMode'] = createExportWrapper('betaPDFAtMode', 2);
 var _main = createExportWrapper('main', 2);
 var _fflush = createExportWrapper('fflush', 1);
 var _emscripten_stack_init = () => (_emscripten_stack_init = wasmExports['emscripten_stack_init'])();

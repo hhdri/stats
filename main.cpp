@@ -17,6 +17,25 @@ extern "C"
         auto dist = boost::math::beta_distribution<>(distAlpha, distBeta);
         return boost::math::quantile(dist, x);
     }
+    double betaPDFAtMode(double distAlpha, double distBeta)
+    {
+        // Handle the uniform distribution case
+        if (distAlpha == 1 && distBeta == 1)
+            return 1.0;
+
+        if (distAlpha == 1 && distBeta > 1)
+            return distBeta; // PDF at 0
+        if (distBeta == 1 && distAlpha > 1)
+            return distAlpha; // PDF at 1
+
+        // Ensure alpha and beta are greater than 1 to have a well-defined mode
+        if (distAlpha <= 1 || distBeta <= 1)
+            throw std::invalid_argument("Alpha and Beta must be greater than 1 to have a mode.");
+        double mode = (distAlpha - 1) / (distAlpha + distBeta - 2);
+        double pdf_value = betaPDF(mode, distAlpha, distBeta);
+
+        return pdf_value;
+    }
 }
 
 void testBetaPDF()
