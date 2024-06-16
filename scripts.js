@@ -7,15 +7,6 @@ function makeSVG(tag, attrs) {
         el.setAttribute(k, attrs[k]);
     return el;
 }
-function maxBetaPDF(alpha, beta) {
-    if (alpha > 1 && beta > 1) {
-        const mode = (alpha - 1) / (alpha + beta - 2);
-        return _betaPDF(mode, alpha, beta);
-    } else {
-        // Handle cases where alpha or beta are <= 1; the PDF max at endpoints 0 or 1
-        return Math.max(_betaPDF(0, alpha, beta), _betaPDF(1, alpha, beta));
-    }
-}
 betaTests = function () {
     console.log("Running tests!");
     const epsilon = 1e-10;
@@ -34,7 +25,7 @@ betaTests = function () {
 function handleGraphUpdate() {
     const distAlpha = parseFloat($("#inputAlpha").val());
     const distBeta = parseFloat($("#inputBeta").val());
-    const maxPDF = maxBetaPDF(distAlpha, distBeta);
+    const maxPDF = _betaPDFAtMode(distAlpha, distBeta);
     const ys = xs.map(x => _betaPDF(x, distAlpha, distBeta) / maxPDF * (svgHeight - verticalMargin * 2));
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
         $("#circle" + i).attr("cy", svgHeight - verticalMargin - ys[i]);
@@ -42,6 +33,7 @@ function handleGraphUpdate() {
 }
 function initUI() {
     _betaPDF = Module.cwrap('betaPDF', 'number', ['number', 'number', 'number']);
+    _betaPDFAtMode = Module.cwrap('betaPDFAtMode', 'number', ['number', 'number']);
 
     betaTests();
 
@@ -83,7 +75,7 @@ function initUI() {
     );
 
     xs = Array.from({ length: (svgWidth - horizontalMargin * 2) }, (_, i) => i / (svgWidth - horizontalMargin * 2));
-    const maxPDF = maxBetaPDF(1, 1);
+    const maxPDF = _betaPDFAtMode(1, 1);
     const ys1 = xs.map(x => _betaPDF(x, 1, 1) / maxPDF * (svgHeight - verticalMargin * 2));
 
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
