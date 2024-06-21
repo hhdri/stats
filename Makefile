@@ -10,6 +10,7 @@ compile-cpp-wasm:
 		-O3 \
 		-sEXPORTED_FUNCTIONS=_betaPDF,_betaPDFAtMode \
 		-sEXPORTED_RUNTIME_METHODS=cwrap \
+		-s USE_CLOSURE_COMPILER=1 \
 		-o boost.js \
 		main.cpp \
 		-I/opt/homebrew/Cellar/boost/1.85.0/include
