@@ -1,3 +1,5 @@
+var domContentLoaded = false;
+var moduleInitialized = false;
 var svg, svgWidth, svgHeight, horizontalMargin, verticalMargin, xs;
 var _betaPDF;
 
@@ -8,7 +10,7 @@ function makeSVG(tag, attrs) {
     return el;
 }
 betaTests = function () {
-    console.log("Running tests!");
+    console.log("Running tests 22!");
     const epsilon = 1e-10;
     if (Math.abs(_betaPDF(0.4, 2, 3) - 1.7280000000000006) > epsilon) console.error("Test 1 failed");
     else console.log("Test 1 passed");
@@ -23,29 +25,34 @@ betaTests = function () {
     else console.log("Test 4 passed");
 }
 function handleGraphUpdate() {
-    const distAlpha = parseFloat($("#inputAlpha").val());
-    const distBeta = parseFloat($("#inputBeta").val());
+    const distAlpha = parseFloat(document.getElementById('inputAlpha').value);
+    const distBeta = parseFloat(document.getElementById('inputBeta').value);
     const maxPDF = _betaPDFAtMode(distAlpha, distBeta);
     const ys = xs.map(x => _betaPDF(x, distAlpha, distBeta) / maxPDF * (svgHeight - verticalMargin * 2));
+
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
-        $("#circle" + i).attr("cy", svgHeight - verticalMargin - ys[i]);
+        const circle = document.getElementById("circle" + i);
+        if (circle) {
+            circle.setAttribute("cy", svgHeight - verticalMargin - ys[i]);
+        }
     }
 }
+
 function initUI() {
     _betaPDF = Module.cwrap('betaPDF', 'number', ['number', 'number', 'number']);
     _betaPDFAtMode = Module.cwrap('betaPDFAtMode', 'number', ['number', 'number']);
 
     betaTests();
 
-    svg = $("#plot");
-    svgWidth = svg.width();
-    svgHeight = svg.height();
+    svg = document.getElementById('plot');
+    svgWidth = svg.clientWidth;
+    svgHeight = svg.clientHeight;
 
     horizontalMargin = 50;
     verticalMargin = 50;
 
     // x-axis
-    svg.append(
+    svg.appendChild(
         makeSVG(
             "line",
             {
@@ -60,7 +67,7 @@ function initUI() {
     );
 
     // y-axis
-    svg.append(
+    svg.appendChild(
         makeSVG(
             "line",
             {
@@ -79,7 +86,7 @@ function initUI() {
     const ys1 = xs.map(x => _betaPDF(x, 1, 1) / maxPDF * (svgHeight - verticalMargin * 2));
 
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
-        svg.append(
+        svg.appendChild(
             makeSVG(
                 "circle",
                 {
@@ -93,16 +100,26 @@ function initUI() {
             )
         );
     }
-    $("#inputAlpha").on("change", handleGraphUpdate);
-    $("#inputBeta").on("change", handleGraphUpdate);
+    document.getElementById('inputAlpha').addEventListener('change', handleGraphUpdate);
+    document.getElementById('inputBeta').addEventListener('change', handleGraphUpdate);
 
 }
 
+function maybeInitUI() {
+    if (domContentLoaded && moduleInitialized) {
+        initUI();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    domContentLoaded = true;
+    maybeInitUI();
+});
 
 var Module = {
     onRuntimeInitialized: function () {
-        $(document).ready(function () {
-            initUI();
-        });
+        moduleInitialized = true;
+        maybeInitUI();
     }
 };
+
