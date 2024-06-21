@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <boost/math/distributions/beta.hpp>
 
 auto epsilon = 1e-10;

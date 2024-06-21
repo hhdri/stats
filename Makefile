@@ -8,7 +8,7 @@ compile-cpp-wasm:
 	em++ \
 		-std=c++14 \
 		-O3 \
-		-sEXPORTED_FUNCTIONS=_betaPDF,_betaPPF,_betaPDFAtMode \
+		-sEXPORTED_FUNCTIONS=_betaPDF,_betaPDFAtMode \
 		-sEXPORTED_RUNTIME_METHODS=cwrap \
 		-o boost.js \
 		main.cpp \

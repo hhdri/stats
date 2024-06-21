@@ -1,7 +1,7 @@
 var domContentLoaded = false;
 var moduleInitialized = false;
 var svg, svgWidth, svgHeight, horizontalMargin, verticalMargin, xs;
-var _betaPDF;
+var _betaPDF, _betaPDFAtMode;
 
 function makeSVG(tag, attrs) {
     var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
