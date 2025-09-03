@@ -71,5 +71,7 @@ int main()
     testBetaPDF();
     testBetaPPF();
 
+    std::cout<<"All tests passed successfully."<<std::endl;
+
     return 0;
 }

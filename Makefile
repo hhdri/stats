@@ -2,8 +2,7 @@ compile-cpp:
 	g++ \
 		-std=c++14 \
 		-o main \
-		main.cpp \
-		-I/opt/homebrew/Cellar/boost/1.85.0/include
+		main.cpp
 compile-cpp-wasm:
 	em++ \
 		-std=c++14 \
@@ -12,5 +11,4 @@ compile-cpp-wasm:
 		-sEXPORTED_RUNTIME_METHODS=cwrap \
 		-s USE_CLOSURE_COMPILER=1 \
 		-o boost.js \
-		main.cpp \
-		-I/opt/homebrew/Cellar/boost/1.85.0/include
+		main.cpp
