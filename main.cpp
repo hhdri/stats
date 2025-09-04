@@ -35,6 +35,15 @@ extern "C"
 
         return pdf_value;
     }
+
+    void betaPDFVector(double* x_values, int size, double distAlpha, double distBeta, double* result)
+    {
+        auto dist = boost::math::beta_distribution<>(distAlpha, distBeta);
+        for (int i = 0; i < size; i++)
+        {
+            result[i] = boost::math::pdf(dist, x_values[i]);
+        }
+    }
 }
 
 void testBetaPDF()

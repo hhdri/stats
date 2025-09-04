@@ -1,7 +1,7 @@
 var domContentLoaded = false;
 var moduleInitialized = false;
 var svg, svgWidth, svgHeight, horizontalMargin, verticalMargin, xs;
-var _betaPDF, _betaPDFAtMode;
+var _betaPDF, _betaPDFAtMode, _betaPDFVector;
 
 function makeSVG(tag, attrs) {
     var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -28,7 +28,24 @@ function handleGraphUpdate() {
     const distAlpha = parseFloat(document.getElementById('inputAlpha').value);
     const distBeta = parseFloat(document.getElementById('inputBeta').value);
     const maxPDF = _betaPDFAtMode(distAlpha, distBeta);
-    const ys = xs.map(x => _betaPDF(x, distAlpha, distBeta) / maxPDF * (svgHeight - verticalMargin * 2));
+    
+    const xsPtr = Module._malloc(xs.length * 8);
+    const ysPtr = Module._malloc(xs.length * 8);
+    
+    for (let i = 0; i < xs.length; i++) {
+        Module.setValue(xsPtr + i * 8, xs[i], 'double');
+    }
+    
+    _betaPDFVector(xsPtr, xs.length, distAlpha, distBeta, ysPtr);
+    
+    const ys = [];
+    for (let i = 0; i < xs.length; i++) {
+        const pdfValue = Module.getValue(ysPtr + i * 8, 'double');
+        ys[i] = pdfValue / maxPDF * (svgHeight - verticalMargin * 2);
+    }
+    
+    Module._free(xsPtr);
+    Module._free(ysPtr);
 
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
         const circle = document.getElementById("circle" + i);
@@ -41,6 +58,7 @@ function handleGraphUpdate() {
 function initUI() {
     _betaPDF = Module.cwrap('betaPDF', 'number', ['number', 'number', 'number']);
     _betaPDFAtMode = Module.cwrap('betaPDFAtMode', 'number', ['number', 'number']);
+    _betaPDFVector = Module.cwrap('betaPDFVector', null, ['number', 'number', 'number', 'number', 'number']);
 
     betaTests();
 
@@ -52,57 +70,21 @@ function initUI() {
     verticalMargin = 50;
 
     // x-axis
-    svg.appendChild(
-        makeSVG(
-            "line",
-            {
-                x1: 0,
-                y1: svgHeight - verticalMargin,
-                x2: svgWidth,
-                y2: svgHeight - verticalMargin,
-                stroke: "grey",
-                "stroke-width": 4
-            }
-        )
-    );
+    svg.appendChild(makeSVG("line", {x1: 0, y1: svgHeight - verticalMargin, x2: svgWidth, y2: svgHeight - verticalMargin, stroke: "grey", "stroke-width": 4}));
 
     // y-axis
-    svg.appendChild(
-        makeSVG(
-            "line",
-            {
-                x1: horizontalMargin,
-                y1: 0,
-                x2: horizontalMargin,
-                y2: svgHeight,
-                stroke: "grey",
-                "stroke-width": 4
-            }
-        )
-    );
+    svg.appendChild(makeSVG("line", {x1: horizontalMargin, y1: 0, x2: horizontalMargin, y2: svgHeight, stroke: "grey", "stroke-width": 4}));
 
     xs = Array.from({ length: (svgWidth - horizontalMargin * 2) }, (_, i) => i / (svgWidth - horizontalMargin * 2));
-    const maxPDF = _betaPDFAtMode(1, 1);
-    const ys1 = xs.map(x => _betaPDF(x, 1, 1) / maxPDF * (svgHeight - verticalMargin * 2));
 
     for (let i = 0; i < svgWidth - horizontalMargin * 2; i++) {
-        svg.appendChild(
-            makeSVG(
-                "circle",
-                {
-                    cx: i + horizontalMargin,
-                    cy: svgHeight - verticalMargin - ys1[i],
-                    r: 2,
-                    fill: "green",
-                    id: "circle" + i,
-                    style: "transition: cy 1s ease"
-                }
-            )
-        );
+        svg.appendChild(makeSVG("circle", {cx: i + horizontalMargin, cy: svgHeight - verticalMargin - 1, r: 2, fill: "green", id: "circle" + i, style: "transition: cy 1s ease"}));
     }
+
+    handleGraphUpdate()
+
     document.getElementById('inputAlpha').addEventListener('change', handleGraphUpdate);
     document.getElementById('inputBeta').addEventListener('change', handleGraphUpdate);
-
 }
 
 function maybeInitUI() {
@@ -122,4 +104,3 @@ var Module = {
         maybeInitUI();
     }
 };
-
