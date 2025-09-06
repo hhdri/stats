@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beta Credible Interval</title>
     <script src="scripts.js"></script>
     <script src="boost.js"></script>
+    <style>
+        #plot {
+            width: 100%;
+            max-width: 700px;
+            aspect-ratio: 1.5;
+            margin: auto;
+            display: block;
+        }
+        #controls {
+            text-align: center;
+            padding-top: 40px;
+        }
+    </style>
 
 <body>
-    <input type="number" id="inputAlpha" value="1" min="1" />
-    <input type="number" id="inputBeta" value="1" min="1" />
-    <h1>Beta Credible Interval</h1>
-    <svg id="plot" width="700" height="500" style="margin-left: 100px;"/>
+    <svg id="plot"/>
+    <br/>
+    <div id="controls">
+    Alpha: <input type="number" id="inputAlpha" value="46" min="1"/>
+    Beta:  <input type="number" id="inputBeta" value="28" min="1" />
