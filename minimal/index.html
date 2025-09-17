@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head><script src="boost.js"></script>
+<!--Does the HTML file looks strange? It's because the tags are not properly closed. Yet it's a valid HTML document.-->
+<body>
+    <p id="text"></p>
+    <script>
+        Module.onRuntimeInitialized = function() {
+            _betaPercentileDensities = Module.cwrap('betaPercentileDensities', null, ['number', 'number', 'number', 'number']);
+            xsPtr = Module._malloc(101 * 8);
+            ysPtr = Module._malloc(101 * 8);
+            
+            _betaPercentileDensities(4, 11, xsPtr, ysPtr);
+
+            for (let i = 0; i <= 100; i++) {
+                x = Module.getValue(xsPtr + i * 8, 'double');
+                y = Module.getValue(ysPtr + i * 8, 'double');
+                document.getElementById("text").innerHTML += `${i}-th percentile x: ${x}, y: ${y}<br>`;
+            }
+
+            Module._free(xsPtr);
+            Module._free(ysPtr);
+        };
+    </script>
